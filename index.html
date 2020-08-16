@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Wheatstone Bridge Calculator</title>
+		
+	
+
+	<link rel="preload" ><script type="text/javascript"></script>	<script>
+		function Compute1(form) {
+			with(Math) {
+				var Precision = 3;
+				var Vb;
+				var Vin = Number(form.Vin.value);
+				var R1 = Number(form.R1.value);
+				var R2 = Number(form.R2.value);
+				var R3 = Number(form.R3.value);
+				var Rx = Number(form.Rx.value);
+				Vb = Vin * (Rx / (R3 + Rx) - R2 / (R1 + R2));
+				form.Vb.value = Vb.toPrecision(Precision);
+			}
+		}
+
+		function Compute2(form) {
+			with(Math) {
+				var Precision = 3;
+				var Rx;
+				var Vin = Number(form.Vin.value);
+				var R1 = Number(form.R1.value);
+				var R2 = Number(form.R2.value);
+				var R3 = Number(form.R3.value);
+				var Vb = Number(form.Vb.value);
+
+				Rx = (R2 * R3 + R3 * (R1 + R2) * (Vb / Vin)) / (R1 - (R1 + R2) * (Vb / Vin));
+				form.Rx.value = Rx.toPrecision(Precision);
+			}
+		}
+	</script>
+</head>
+
+<body>
+
+<p class="error" id="error_msg_p"></p>		<div class="content">
+			<div class="row">
+				
+				<div class="col-sm-8">
+					<h1 class="page-title">Wheatstone Bridge Calculator</h1>
+					<!-- Content Start  -->
+					<p>The Wheatstone bridge is a very useful circuit.
+						When the bridge is fully balanced, the right side resistors
+						identical to the left side resistors (R1=R3, and R2=Rx), the voltage
+						across the bridge is zero. However, with a small change in
+						resistance on one of the resistors, and the bridge becomes unbalanced, and
+						a voltage difference appears. Wheatstone bridge are used in all sorts of
+						sensor devices such as strain gauges, pressure gauges, etc.</p>
+
+					<p><img src="./WheatStone-Schematic.gif" alt="WheatStone Bridge Calculator Schematic"></p>
+					<p class="image_label">A differencing amplifier can be used to
+						extract the common mode signal, while rejecting all of the common mode
+						noise. As a result very small signals and changes can be extracted
+						from the bridge, because common mode noise is easily rejected.</p>
+
+					<form method="POST" name="ParamForm">
+						<table class="table table-bordered">
+							<tbody><tr>
+								<td colspan="2"><b>Inputs:</b></td>
+							</tr>
+							<tr>
+								<td>V<sub>in</sub>: Input Voltage:</td>
+								<td><input type="text" name="Vin" size="17">
+									(V)</td>
+							</tr>
+							<tr>
+								<td>R1</td>
+								<td><input type="text" name="R1" size="17">
+									(ohms)</td>
+							</tr>
+							<tr>
+								<td>R2</td>
+								<td><input type="text" name="R2" size="17">
+									(ohms)</td>
+							</tr>
+							<tr>
+								<td>R3</td>
+								<td><input type="text" name="R3" size="17">
+									(ohms)</td>
+							</tr>
+							<tr>
+								<td colspan="2"><b>Results:</b></td>
+							</tr>
+							<tr>
+								<td height="34">Rx<br>
+									<input type="text" name="Rx" size="17">
+									(ohms)</td>
+								<td height="34">V<sub>B</sub>: Bridge Voltage<br>
+									<input type="text" name="Vb" size="17">
+									(V)</td>
+							</tr>
+							<tr>
+								<td class="text-center"><input type="button" value="Compute -&gt;" name="B1" onclick="Compute1(document.ParamForm);"></td>
+								<td class="text-center"><input type="button" value="&lt;- Compute" name="B2" onclick="Compute2(document.ParamForm);"></td>
+							</tr>
+						</tbody></table>
+					</form>
+					
+					<h3>Equations:</h3>
+					<p>The bridge voltage is calculated as follows:</p>
+					<p>V<sub>B</sub>= V<sub>in</sub>*[Rx/(R3+Rx)-R2/(R1+R2)]</p>
+					<p>If R3=R1, and Rx= R2+delta, then</p>
+					<p>V<sub>B</sub>= V<sub>in</sub>*[(R2+delta)/(R1+R2+delta)-R2/(R1+R2)]</p>
+					<p>Now if we assume delta is much smaller than R1+R2, then</p>
+					<p>V<sub>B</sub>= ~ V<sub>in</sub>*[delta/(R1+R2)]</p>
+					<p>So we can see that the bridge voltage is approximately proportional
+						to the error delta, divided by the sum of the resistors on one side.</p>
+					<p>Given the bridge voltage we can compute the value for an unknown resistor.</p>
+					<p>(R1+R2)*(R3+Rx)*V<sub>B</sub>/V<sub>in</sub>= Rx*(R1+R2)+ R2*(R3+Rx)</p>
+					<p>Rx*(R1+R2)*V<sub>B</sub>/V<sub>in</sub> + R3*
+						(R1+R2)V<sub>B</sub>/V<sub>in</sub>= Rx*R1+Rx*R2 - R2*R3- Rx*R2</p>
+					<p>Rx*R1 - Rx*(R1+R2)*V<sub>B</sub>/V<sub>in</sub>= R2*R3 + R3* (R1+R2)V<sub>B</sub>/V<sub>in</sub></p>
+					<p>Rx = (R2*R3 + R3* (R1+R2)V<sub>B</sub>/V<sub>in</sub>)/ (R1- (R1+R2)*V<sub>B</sub>/V<sub>in</sub>)</p>
+
+					<!-- Content End  -->
+				</div>
+				
+
+
+</body>
+</html>
